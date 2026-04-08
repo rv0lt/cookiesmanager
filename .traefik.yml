@@ -1,0 +1,7 @@
+displayName: Demo plugin; Cookies Manager
+type: middleware
+import: github.com/rv0lt/cookiesmanager
+summary: |
+  Update, Add or Remove cookies of Traefik requests.
+testData:
+  keepCookies: []
