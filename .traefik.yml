@@ -1,4 +1,4 @@
-displayName: Flag Cookies Manager
+displayName: Secure Flag Cookies Manager
 type: middleware
 import: github.com/rv0lt/cookiesmanager
 summary: |
