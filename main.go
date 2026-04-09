@@ -96,7 +96,6 @@ func (r *responseWriter) WriteHeader(statusCode int) {
 	*/
 	//cookie, _ := http.ParseSetCookie(rawCookies)
 
-	// https://stackoverflow.com/questions/28262376/parse-cookie-string-in-golang/33926065#33926065
 	header := http.Header{}
 	header.Add("Set-Cookie", rawCookies)
 	req := http.Response{Header: header}
