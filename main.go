@@ -1,4 +1,4 @@
-// Package cookiesmanager to add a Secure flag to the cookies
+// Just enable or disable the secure flag for sticky cookies
 package cookiesmanager
 
 import (
@@ -18,7 +18,7 @@ func CreateConfig() *Config {
 	return &Config{}
 }
 
-// CookieMng an plugin with a possible configuration.
+// CookieMng with possible configuration.
 type CookieMng struct {
 	next   http.Handler
 	name   string
@@ -38,13 +38,13 @@ func (p *CookieMng) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 
 	_secure := p.secure
 
-	if req.Header.Get("Upgrade") == "websocket" {
-		p.next.ServeHTTP(rw, req)
-		return
-	}
+	/*
+		websockets need to be managed with their own handlers.
+		Otherwise, using the http.writer will break them.
 
-	// if no tls, don't do anything
-	if req.TLS == nil {
+		https://www.reddit.com/r/golang/comments/d4h7tk/how_to_use_http_server_and_websocket_server/
+	*/
+	if req.Header.Get("Upgrade") == "websocket" {
 		p.next.ServeHTTP(rw, req)
 		return
 	}
@@ -76,7 +76,7 @@ func (r *responseWriter) WriteHeader(statusCode int) {
 	// Extract raw Set-Cookie headers
 	rawCookies := headers.Get(setCookieHeader)
 
-	// if set-cookie is not present, don't do anything
+	// if set-cookie was not present, leave
 	if rawCookies == "" {
 		r.writer.WriteHeader(statusCode)
 		return

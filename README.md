@@ -1,10 +1,6 @@
-# Traefik middleware cookies manager plugin
-
-TODO
+# Traefik middleware to enable or disable the secure flag on sticky cookies
 
 Based on: https://github.com/Lambda-IT/traefik-plugin-cookie-flags/tree/main
-
-## Demo
 
 ## Usage
 
@@ -16,7 +12,7 @@ experimental:
   plugins:
     cookiesmanager:
       moduleName: github.com/rv0lt/cookiesmanager
-      version: "0.0.1"
+      version: "0.1.0"
 ```
 
 Use the plugin in your dynamic configuration like this
@@ -30,7 +26,7 @@ http:
       rule: host(`demo.localhost`)
       service: service-foo
       entryPoints:
-        - web
+        - websecure
       middlewares:
         - cookiesmanager
 
