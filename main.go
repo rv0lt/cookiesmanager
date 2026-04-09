@@ -10,7 +10,6 @@ const setCookieHeader string = "Set-Cookie"
 
 // Config the plugin configuration.
 type Config struct {
-	//	SameSite string `json:"sameSite,omitempty" toml:"sameSite,omitempty" yaml:"sameSite,omitempty"`
 	Secure bool `json:"secure,omitempty" toml:"secure,omitempty" yaml:"secure,omitempty"`
 }
 
@@ -21,38 +20,28 @@ func CreateConfig() *Config {
 
 // CookieMng an plugin with a possible configuration.
 type CookieMng struct {
-	next http.Handler
-	name string
-	//	sameSite string
+	next   http.Handler
+	name   string
 	secure bool
 }
 
 // New creates new instance of the plugin.
 func New(_ context.Context, next http.Handler, config *Config, name string) (http.Handler, error) {
 	return &CookieMng{
-		name: name,
-		next: next,
-		//		sameSite: config.SameSite,
+		name:   name,
+		next:   next,
 		secure: config.Secure,
 	}, nil
 }
 
 func (p *CookieMng) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
-	/*
-		_sameSite := http.SameSiteDefaultMode //nolint
 
-		switch p.sameSite {
-		case "lax":
-			_sameSite = http.SameSiteLaxMode
-		case "strict":
-			_sameSite = http.SameSiteStrictMode
-		case "none":
-			_sameSite = http.SameSiteNoneMode
-		default:
-			_sameSite = http.SameSiteDefaultMode
-		}
-	*/
 	_secure := p.secure
+
+	// if no tls, don't do anything
+	if req.TLS == nil {
+		return
+	}
 
 	myWriter := &responseWriter{
 		writer: rw,
