@@ -4,5 +4,4 @@ import: github.com/rv0lt/cookiesmanager
 summary: |
   TODO
 testData:
-  sameSite: "None"
   secure: true
