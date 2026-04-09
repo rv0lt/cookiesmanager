@@ -1,3 +1,3 @@
 module github.com/rv0lt/cookiesmanager
 
-go 1.18
+go 1.25.2

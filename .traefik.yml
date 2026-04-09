@@ -1,7 +1,8 @@
-displayName: Demo plugin; Cookies Manager
+displayName: Flag Cookies Manager
 type: middleware
 import: github.com/rv0lt/cookiesmanager
 summary: |
-  Update, Add or Remove cookies of Traefik requests.
+  TODO
 testData:
-  keepCookies: []
+  sameSite: "None"
+  secure: true
