@@ -1,22 +1,10 @@
 # Traefik middleware cookies manager plugin
 
-Simple plugin that ensures cookies of requests contains or does not contains some values. If the specified cookie is not in the request, then the plugin add the cookie.
+TODO
 
-Based on: https://github.com/theoguidoux/cookiesmanager
-
-## TODO: Explain changes from main project
+Based on: https://github.com/Lambda-IT/traefik-plugin-cookie-flags/tree/main
 
 ## Demo
-
-Navigate to the [demo](https://github.com/rv0lt/cookiesmanager/tree/main/demo) 
-folder in the repo to run a quick docker-compose
-demonstration of this plugin. It includes additional information on
-how to start and use the demo.
-
-The demo also illustrates how the plugin can be loaded in a traefik
-docker image and used without relying on the traefik Pilot. For more
-information about packaging plugins in an image see 
-[here](https://traefik.io/blog/using-private-plugins-in-traefik-proxy-2-5/).
 
 ## Usage
 
@@ -56,15 +44,5 @@ http:
     cookiesmanager:
       plugin:
         cookiesmanager:
-          adder:
-            - name: cookie1
-              value: "foo=bar"
-            - name: "SameSite"
-              value: "none"
-          remover:
-            - name: "cookie2"
-              value: "foo=bar"
+          secure: true
 ```
-
-The middleware defined above would make it so that requests to `service-foo` 
-have `cookie1` containing `foo=bar`, `SameSite` containing `none` and `cookie2` not containing `foo=bar`.
