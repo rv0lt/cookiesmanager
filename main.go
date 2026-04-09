@@ -2,8 +2,11 @@
 package traefik_plugin_cookie_flags //nolint
 
 import (
+	"bufio"
 	"context"
+	"fmt"
 	"net/http"
+	"strings"
 )
 
 const setCookieHeader string = "Set-Cookie"
@@ -89,7 +92,17 @@ func (r *responseWriter) WriteHeader(statusCode int) {
 
 	// Delete existing set-cookie headers
 	headers.Del(setCookieHeader)
-	cookie, _ := http.ParseSetCookie(rawCookies)
+
+	/*
+		Because things are not always as beautiful as we want, this function can't be used
+		Because the traefik golang interpret, as of today, only supports until go 1.22, and the function ParseSetCookie was added in go 1.23
+	*/
+	//cookie, _ := http.ParseSetCookie(rawCookies)
+
+	// https://stackoverflow.com/questions/28262376/parse-cookie-string-in-golang/33926065#33926065
+	rawRequest := fmt.Sprintf("GET / HTTP/1.0\r\nCookie: %s\r\n\r\n", rawCookies)
+	req, _ := http.ReadRequest(bufio.NewReader(strings.NewReader(rawRequest)))
+	cookie := req.Cookies()[0]
 
 	// Modify cookie
 	cookie.Secure = r.secure
