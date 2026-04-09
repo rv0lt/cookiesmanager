@@ -2,11 +2,8 @@
 package cookiesmanager
 
 import (
-	"bufio"
 	"context"
-	"fmt"
 	"net/http"
-	"strings"
 )
 
 const setCookieHeader string = "Set-Cookie"
@@ -100,8 +97,9 @@ func (r *responseWriter) WriteHeader(statusCode int) {
 	//cookie, _ := http.ParseSetCookie(rawCookies)
 
 	// https://stackoverflow.com/questions/28262376/parse-cookie-string-in-golang/33926065#33926065
-	rawRequest := fmt.Sprintf("GET / HTTP/1.0\r\nCookie: %s\r\n\r\n", rawCookies)
-	req, _ := http.ReadRequest(bufio.NewReader(strings.NewReader(rawRequest)))
+	header := http.Header{}
+	header.Add("Set-Cookie", rawCookies)
+	req := http.Response{Header: header}
 	cookie := req.Cookies()[0]
 
 	// Modify cookie
