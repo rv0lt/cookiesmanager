@@ -1,5 +1,5 @@
-// Package traefik_plugin_cookie_flags a traefik plugin adding flags to cookies in the response.
-package traefik_plugin_cookie_flags //nolint
+// Package cookiesmanager to add a Secure flag to the cookies
+package cookiesmanager
 
 import (
 	"bufio"
