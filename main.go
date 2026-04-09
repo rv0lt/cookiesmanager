@@ -38,8 +38,14 @@ func (p *CookieMng) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 
 	_secure := p.secure
 
+	if req.Header.Get("Upgrade") == "websocket" {
+		p.next.ServeHTTP(rw, req)
+		return
+	}
+
 	// if no tls, don't do anything
 	if req.TLS == nil {
+		p.next.ServeHTTP(rw, req)
 		return
 	}
 
