@@ -1,7 +1,7 @@
-displayName: Secure Flag Cookies Manager
+displayName: Secure Flag Manager; Set-Cookie
 type: middleware
 import: github.com/rv0lt/cookiesmanager
 summary: |
-  TODO
+  Just enable or disable the secure flag for sticky cookies
 testData:
   secure: true
