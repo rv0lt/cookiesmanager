@@ -44,7 +44,7 @@ func (p *CookieMng) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 
 		https://www.reddit.com/r/golang/comments/d4h7tk/how_to_use_http_server_and_websocket_server/
 	*/
-	if req.Header.Get("Upgrade") == "websocket" {
+	if req.Header.Get("Connection") == "Upgrade" && req.Header.Get("Upgrade") == "websocket" {
 		p.next.ServeHTTP(rw, req)
 		return
 	}
