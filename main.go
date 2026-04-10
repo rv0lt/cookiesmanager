@@ -73,11 +73,11 @@ func (r *responseWriter) Write(bytes []byte) (int, error) {
 func (r *responseWriter) WriteHeader(statusCode int) {
 	headers := r.writer.Header()
 
-	// Extract raw Set-Cookie headers
-	rawCookies := headers.Get(setCookieHeader)
+	// Get all Set-Cookie headers
+	rawCookies := headers.Values("Set-Cookie")
 
 	// if set-cookie was not present, leave
-	if rawCookies == "" {
+	if len(rawCookies) == 0 {
 		r.writer.WriteHeader(statusCode)
 		return
 	}
@@ -85,22 +85,27 @@ func (r *responseWriter) WriteHeader(statusCode int) {
 	// Delete existing set-cookie headers
 	headers.Del(setCookieHeader)
 
-	/*
-		Because things are not always as beautiful as we want, this function can't be used
-		Because the traefik golang interpret, as of today, only supports until go 1.22, and the function ParseSetCookie was added in go 1.23
-	*/
 	//cookie, _ := http.ParseSetCookie(rawCookies)
+	for _, raw := range rawCookies {
 
-	header := http.Header{}
-	header.Add("Set-Cookie", rawCookies)
-	req := http.Response{Header: header}
-	cookie := req.Cookies()[0]
+		// From Go >= 1.23, we can use the function http.ParseSetCookie
+		// But traefik go interpret is pinned at 1.22 as of today
+		header := http.Header{}
+		header.Add("Set-Cookie", raw)
+		resp := http.Response{Header: header}
+		cookies := resp.Cookies()
 
-	// Modify cookie
-	cookie.Secure = r.secure
+		if len(cookies) == 0 {
+			continue // skip invalid cookies
+		}
+		cookie := cookies[0]
 
-	// write back the modified cookie
-	http.SetCookie(r, cookie)
+		// Modify cookie
+		cookie.Secure = r.secure
+
+		// write back the modified cookie
+		http.SetCookie(r, cookie)
+	}
 
 	r.writer.WriteHeader(statusCode)
 }
